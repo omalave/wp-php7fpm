@@ -15,4 +15,4 @@ sed -i "s/^<\/VirtualHost>/ProxyPassMatch ^\/(.*\\.php(\/.*)?)$ fcgi:\/\/127.0.0
 
 
 service apache2 restart
-service php7-fpm restart
+service php7.0-fpm restart
