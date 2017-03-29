@@ -1,11 +1,15 @@
 #update everything
 apt-get update
 
+## installing mysql
+debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+apt-get -y install mysql-server
+
 apt-get install -y apache2
 apt-get install -y php
 apt-get install -y libapache2-mod-php
 apt-get install -y php7.0-mbstring
-
 
 a2enmod proxy_fcgi
 
@@ -16,3 +20,19 @@ sed -i "s/^<\/VirtualHost>/ProxyPassMatch ^\/(.*\\.php(\/.*)?)$ fcgi:\/\/127.0.0
 
 service apache2 restart
 service php7.0-fpm restart
+
+mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS wordpress_dev;"
+
+cd /var/www/html/
+rm index.html
+wget http://wordpress.org/latest.tar.gz
+
+tar xzvf latest.tar.gz
+
+cd wordpress/
+
+mv ./* ../
+
+cd ..
+rm latest.tar.gz
+rm -R wordpress/
